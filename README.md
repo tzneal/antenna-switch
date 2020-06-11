@@ -1,7 +1,8 @@
 
+https://github.com/tzneal/antenna-switch/blob/master/images/mount.jpg
 
-![Mount](https://raw.githubusercontent.com/tzneal/antenna-switch/images/mount.jpg)
-![UI](https://raw.githubusercontent.com/tzneal/antenna-switch/images/mount.jpg)
+![Mount](https://github.com/tzneal/antenna-switch/raw/master/images/mount.jpg)
+![UI](https://github.com/tzneal/antenna-switch/raw/master/images/web-ui.png)
 
 ## Approximate Bill of Materials
 - 1x #3140 Tic 36v4 USB Multi-Interface High-Power Stepper Motor Controller (Connectors Soldered)
