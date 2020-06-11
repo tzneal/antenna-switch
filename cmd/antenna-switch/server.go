@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"sync"
 	"time"
 
 	"github.com/tzneal/antenna-switch/ticcmd"
@@ -15,6 +16,7 @@ type Server struct {
 	currentPort int
 	ports       []Port
 	messages    []string
+	mu          sync.Mutex
 	tic         *ticcmd.Client
 }
 
@@ -174,6 +176,8 @@ func (s *Server) ServeIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) SwitchPorts(w http.ResponseWriter, r *http.Request) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	portValues := r.URL.Query()["port"]
 	if len(portValues) != 0 {
 		port := portValues[0]
@@ -202,6 +206,8 @@ func (s *Server) SwitchPorts(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) Calibrate(w http.ResponseWriter, r *http.Request) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.AddMessage("Calibrating")
 	s.tic.Energize()
 	defer s.tic.Deenergize()
