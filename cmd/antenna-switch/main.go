@@ -40,11 +40,13 @@ func main() {
 		}
 	}
 
-	server := &Server{
-		Ports: config.Ports,
+	server, err := NewServer(config.Ports)
+	if err != nil {
+		log.Fatalf("error creating server: %s", err)
 	}
 	http.HandleFunc("/", server.ServeIndex)
 	http.HandleFunc("/switch", server.SwitchPorts)
+	http.HandleFunc("/calibrate", server.Calibrate)
 	log.Printf("%d ports configured %v", len(config.Ports), config.Ports)
 	log.Printf("listening on %s", config.ListenAddress)
 	log.Fatal(http.ListenAndServe(config.ListenAddress, nil))

@@ -5,9 +5,13 @@ import (
 	"os"
 )
 
+type Port struct {
+	Label    string
+	Position int
+}
 type Config struct {
 	ListenAddress string
-	Ports         []string
+	Ports         []Port
 }
 
 func (c Config) WriteTo(destFile string) error {
@@ -24,6 +28,12 @@ func (c Config) WriteTo(destFile string) error {
 func DefaultConfig() Config {
 	return Config{
 		ListenAddress: "0.0.0.0:8123",
-		Ports:         []string{"40M", "20M", "Ground", "Unused", "Unused"},
+		Ports: []Port{
+			{"40m", 32},
+			{"20m", 16},
+			{"Ground", 0},
+			{"40/20m", -16},
+			{"6m", -32},
+		},
 	}
 }

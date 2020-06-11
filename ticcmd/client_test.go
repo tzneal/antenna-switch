@@ -49,7 +49,7 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestParseStatus(t *testing.T) {
-	st := []byte(`Name:                         Tic T834 Stepper Motor Controller
+	st := []byte(`Label:                         Tic T834 Stepper Motor Controller
 Serial number:                00305428
 Firmware version:             1.06
 Last reset:                   Power-on reset

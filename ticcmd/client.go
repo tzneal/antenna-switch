@@ -31,6 +31,7 @@ func (c Client) runCmd(args ...string) ([]byte, error) {
 func (c Client) Status() (Status, error) {
 	op, err := c.runCmd("--status")
 	if err != nil {
+		log.Println(string(op))
 		return Status{}, fmt.Errorf("error retrieving status: %w", err)
 	}
 	return ParseStatus(op)
@@ -64,7 +65,6 @@ func (c Client) WaitForPosition(pos int, max time.Duration) error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("tgt=", pos, st.CurrentPosition, st.TargetPosition)
 		if st.CurrentPosition == pos {
 			return nil
 		}
@@ -92,6 +92,25 @@ func (c Client) Deenergize() error {
 	op, err := c.runCmd("--deenergize")
 	if err != nil {
 		return fmt.Errorf("error de-energizing: %s (%w)", string(op), err)
+	}
+	return nil
+}
+
+func (c Client) SetKnownPosition(pos int) error {
+	if err := c.exitSafeStart(); err != nil {
+		return err
+	}
+	st, err := c.Status()
+	if err != nil {
+		return err
+	}
+
+	if !st.Energized {
+		return errors.New("motor not energized")
+	}
+	op, err := c.runCmd("--halt-and-set-position", strconv.Itoa(pos))
+	if err != nil {
+		return fmt.Errorf("error setting position: %s (%w)", string(op), err)
 	}
 	return nil
 }

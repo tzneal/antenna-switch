@@ -35,6 +35,7 @@ type Status struct {
 	ErrorsStoppingMotor  []string
 	ErrorsSinceLastCheck []string
 	TargetPosition       int
+	TargetVelocity       int
 }
 
 func ParseStatus(op []byte) (Status, error) {
@@ -53,7 +54,7 @@ func ParseStatus(op []byte) (Status, error) {
 			fieldName := strings.TrimSpace(line[0:colonIdx])
 			fieldValue := strings.TrimSpace(line[colonIdx+1:])
 			switch fieldName {
-			case "Name":
+			case "Label", "Name":
 				st.Name = fieldValue
 			case "Serial number":
 				st.Serial = fieldValue
@@ -117,6 +118,12 @@ func ParseStatus(op []byte) (Status, error) {
 					return Status{}, fmt.Errorf("error parsing target position %s: %w", fieldValue, err)
 				}
 				st.TargetPosition = int(pos)
+			case "Target velocity":
+				vel, err := strconv.ParseInt(fieldValue, 10, 64)
+				if err != nil {
+					return Status{}, fmt.Errorf("error parsing target velocity %s: %w", fieldValue, err)
+				}
+				st.TargetVelocity = int(vel)
 
 			case "Position uncertain":
 				st.PositinUncertain, err = parseBool(fieldValue)
@@ -134,6 +141,10 @@ func ParseStatus(op []byte) (Status, error) {
 				for sc.Scan() {
 					line := strings.TrimSpace(sc.Text())
 					if strings.HasPrefix(line, "Errors that occurred since last check:") {
+						stoppingMotorErrors = false
+						continue
+					}
+					if strings.HasPrefix(line, "Last motor driver errors:") {
 						stoppingMotorErrors = false
 						continue
 					}
