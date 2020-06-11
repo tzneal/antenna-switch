@@ -1,6 +1,4 @@
 
-https://github.com/tzneal/antenna-switch/blob/master/images/mount.jpg
-
 ![Mount](https://github.com/tzneal/antenna-switch/raw/master/images/mount.jpg)
 ![UI](https://github.com/tzneal/antenna-switch/raw/master/images/web-ui.png)
 
