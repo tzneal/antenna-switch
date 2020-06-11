@@ -18,3 +18,29 @@ sudo ./install.sh
 udevadm control --reload
 ```
 
+### Install antenna-switch
+```bash
+# pull the code
+git clone https://github.com/tzneal/antenna-switch.git
+
+# build it
+cd antenna-switch/
+go build github.com/tzneal/antenna-switch/cmd/antenna-switch
+
+# install the binary
+sudo mv antenna-switch /usr/bin 
+
+# setcap so it can bind to privileged ports (<1024)
+sudo setcap cap_net_bind_service=+epi /usr/bin/antenna-switch
+ 
+# install the service
+cd tools
+./install-service.sh
+```
+
+### Configuration
+
+```bash
+vi ~/.antenna-switch.json 
+sudo systemctl restart antenna-switch
+```
